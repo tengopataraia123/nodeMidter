@@ -7,7 +7,7 @@ router.post('/add',async (req,res)=>{
     try {
         const { studentName } = req.body;
         
-        const student = await Subject.create({ name: studentName });
+        const student = await Student.create({ name: studentName });
     
         res.json({ message: 'Student added successfully' });
       } catch (error) {
@@ -31,19 +31,20 @@ router.post('/choose-subject',async (req,res)=>{
         }
 
         student.subjects.push(subject);
-    
-        res.json({ message: 'Subject added for Student successfully' });
-      } catch (error) {
+
+        await student.save();
+        Subjecton({ error: error.message });
+      }
+      catch (error) {
         res.status(500).json({ error: error.message });
       }
-
-})
+});
 
 router.get('/getSubjects/:studentId',async (req,res)=>{
     try {
         const studentId = req.params.studentId;
   
-        const student = await Subject.findById(studentId).populate("subjects");
+        const student = await Student.findById(studentId).populate("subjects");
 
         if (!student) {
             return res.status(404).json({ message: 'Student not found' });

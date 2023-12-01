@@ -7,7 +7,7 @@ router.post('/add',async (req,res)=>{
     try {
         const { lecturerName } = req.body;
         
-        const lecturer = await Subject.create({ name: lecturerName });
+        const lecturer = await Lecturer.create({ name: lecturerName });
     
         res.json({ message: 'Lecturer added successfully' });
       } catch (error) {
@@ -31,6 +31,8 @@ router.post('/choose-subject',async (req,res)=>{
         }
 
         lecturer.subjects.push(subject);
+
+        await lecturer.save();
     
         res.json({ message: 'Lecturer added for Student successfully' });
       } catch (error) {
